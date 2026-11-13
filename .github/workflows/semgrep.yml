@@ -10,8 +10,6 @@ on:
 permissions:
   contents: read
   security-events: write
-  pages: write
-  id-token: write
 
 jobs:
   semgrep:
@@ -38,29 +36,3 @@ jobs:
         if: always()
         with:
           sarif_file: semgrep.sarif
-
-  deploy-dashboard:
-    name: Deploy Dashboard to GitHub Pages
-    needs: semgrep
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-        continue-on-error: true
-
-      - name: Upload Artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: '.'
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
