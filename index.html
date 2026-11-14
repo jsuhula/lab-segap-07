@@ -628,9 +628,6 @@
             <button class="nav-tab" onclick="switchTab('triaje')">
                 <i data-lucide="scale"></i> Triaje Falso Positivo
             </button>
-            <button class="nav-tab" onclick="switchTab('exposicion')">
-                <i data-lucide="presentation"></i> Modo Exposición
-            </button>
         </nav>
     </div>
 </header>
@@ -1130,94 +1127,7 @@ include(__DIR__ . "/pages/" . $file);</code></pre>
         </div>
     </div>
 
-    <!-- TAB 6: MODO EXPOSICIÓN -->
-    <div id="tab-exposicion" class="tab-panel">
-        <div class="presentation-container">
-            <!-- Slide 1 -->
-            <div class="slide active" id="slide-1">
-                <div class="slide-tag"><i data-lucide="bookmark" style="width:14px; height:14px;"></i> Diapositiva 1 de 6 · Portada</div>
-                <h2 class="slide-title">Auditoría Estática de Código (SAST) con Semgrep sobre bWAPP</h2>
-                <div class="slide-body">
-                    <p><strong>Curso:</strong> Seguridad de Aplicaciones | Universidad Mariano Gálvez de Guatemala</p>
-                    <p><strong>Expositor:</strong> Josias Suhul</p>
-                    <p style="margin-top:1rem;"><strong>Objetivo:</strong> Evaluar de forma automatizada y estructurada el código fuente de una aplicación web vulnerable (bWAPP) usando Semgrep, mapeando debilidades hacia OWASP Top 10 y CWE para emitir una postura de seguridad corporativa.</p>
-                </div>
-            </div>
 
-            <!-- Slide 2 -->
-            <div class="slide" id="slide-2">
-                <div class="slide-tag"><i data-lucide="cpu" style="width:14px; height:14px;"></i> Diapositiva 2 de 6 · Arquitectura y Reglas</div>
-                <h2 class="slide-title">¿Cómo Funciona Semgrep? Patrones vs Taint Tracking</h2>
-                <div class="slide-body">
-                    <ul>
-                        <li><strong>Análisis Sintáctico:</strong> Busca construcciones inseguras directas como <code>eval()</code> o <code>phpinfo()</code> sin depender de su contexto de llamada.</li>
-                        <li><strong>Taint Mode (Seguimiento de Datos):</strong> Rastrea datos no confiables desde <em>sources</em> (<code>$_GET</code>, <code>$_POST</code>) hasta puntos de ejecución peligrosos (<em>sinks</em> como <code>mysqli_query</code> o <code>system</code>).</li>
-                        <li><strong>Ruleset del Laboratorio:</strong> 14 reglas locales en YAML mapeadas estrictamente a estándares de la industria (OWASP 2021 y catálogo CWE de MITRE).</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Slide 3 -->
-            <div class="slide" id="slide-3">
-                <div class="slide-tag"><i data-lucide="bar-chart-2" style="width:14px; height:14px;"></i> Diapositiva 3 de 6 · Resultados Globales</div>
-                <h2 class="slide-title">Resultados del Escaneo: 138 Hallazgos en 198 Archivos</h2>
-                <div class="slide-body">
-                    <ul>
-                        <li><strong>Core bWAPP:</strong> 103 hallazgos (60 Alta, 40 Media, 3 Baja) — Concentra las inyecciones más críticas.</li>
-                        <li><strong>soap (NuSOAP):</strong> 32 hallazgos — Librería externa que introduce debilidad por cifrado deprecado.</li>
-                        <li><strong>admin:</strong> 3 hallazgos — Exposición de configuración técnica y contraseñas quemadas.</li>
-                        <li><strong>Distribución:</strong> Prácticamente el 50% de las vulnerabilidades son de severidad <strong>Alta</strong>, dominadas por <strong>A03: Injection (73)</strong>.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Slide 4 -->
-            <div class="slide" id="slide-4">
-                <div class="slide-tag"><i data-lucide="shield-check" style="width:14px; height:14px;"></i> Diapositiva 4 de 6 · Hallazgos y Remediación</div>
-                <h2 class="slide-title">Casos Críticos: De la Detección a la Corrección</h2>
-                <div class="slide-body">
-                    <ul>
-                        <li><strong>Inyección SQL (sqli_1.php):</strong> Se soluciona migrando a consultas preparadas (Prepared Statements con PDO/MySQLi).</li>
-                        <li><strong>Inyección de Comandos (commandi.php):</strong> Evitar <code>shell_exec</code>; aplicar validación con lista blanca y <code>escapeshellarg()</code>.</li>
-                        <li><strong>Ejecución de Código (php_eval.php):</strong> RCE directo; se remueve completamente el uso de <code>eval()</code>.</li>
-                        <li><strong>XSS Reflejado (xss_get.php):</strong> Codificación contextual mediante <code>htmlspecialchars()</code> con bandera ENT_QUOTES.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Slide 5 -->
-            <div class="slide" id="slide-5">
-                <div class="slide-tag"><i data-lucide="filter" style="width:14px; height:14px;"></i> Diapositiva 5 de 6 · Triaje y Ajuste</div>
-                <h2 class="slide-title">Triaje Técnico: Descartando Falsos Positivos</h2>
-                <div class="slide-body">
-                    <ul>
-                        <li>La regla de cifrado débil alertó sobre llamadas a <code>base64_encode()</code> en NuSOAP.</li>
-                        <li><strong>Conclusión del Analista:</strong> Base64 es un mecanismo de transporte para XML/SOAP, no un algoritmo criptográfico.</li>
-                        <li><strong>Acción Correctiva:</strong> Ajuste del archivo YAML de reglas mediante filtros <code>pattern-not</code> para refinar la precisión del escáner y reducir la fatiga de alertas.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Slide 6 -->
-            <div class="slide" id="slide-6">
-                <div class="slide-tag"><i data-lucide="flag" style="width:14px; height:14px;"></i> Diapositiva 6 de 6 · Postura Ejecutiva</div>
-                <h2 class="slide-title">Postura de Seguridad y Hoja de Ruta</h2>
-                <div class="slide-body">
-                    <ul>
-                        <li><strong>Índice Ponderado:</strong> 538 puntos de riesgo.</li>
-                        <li><strong>Dictamen:</strong> <strong>Crítico (Bloqueo de Despliegue)</strong>. La aplicación no cumple con los requisitos mínimos de seguridad.</li>
-                        <li><strong>Integración en CI/CD:</strong> Se configuró un pipeline de GitHub Actions (<code>semgrep.yml</code>) que escanea automáticamente cada Pull Request y publica reportes SARIF.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="slide-controls">
-                <button class="btn btn-secondary" onclick="prevSlide()"><i data-lucide="arrow-left"></i> Anterior</button>
-                <span id="slideIndicator" style="font-size:0.85rem; font-weight:600; color:var(--text-secondary);">1 / 6</span>
-                <button class="btn" onclick="nextSlide()">Siguiente <i data-lucide="arrow-right"></i></button>
-            </div>
-        </div>
-    </div>
 </main>
 
 <script>
